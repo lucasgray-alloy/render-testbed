@@ -5,7 +5,6 @@
   "main": "dist/index.js",
   "author": "Lucas Gray <lucas@myalloy.com>",
   "scripts": {
-    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
     "build": "tsc",
     "prestart": "npm run build",
     "start": "node .",
