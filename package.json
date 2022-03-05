@@ -4,30 +4,24 @@
   "description": "",
   "main": "dist/index.js",
   "author": "Lucas Gray <lucas@myalloy.com>",
-  "license": "MIT",
   "scripts": {
-    "start": "tsns run",
+    "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
+    "build": "tsc",
+    "prestart": "npm run build",
+    "start": "node .",
     "test": "run-s build-and:test",
     "tdd": "run-p watch:*",
-    "build": "tsns build",
-    "docker:build": "docker build -t ${npm_package_name}:${npm_package_version} .",
-    "docker:run": "docker run --rm ${npm_package_name}:${npm_package_version}",
     "commitmsg": "validate-commit-msg",
     "precommit": "run-s lint:* build",
     "prepush": "run-s build-and:test",
     "lint:ts": "tslint --project tsconfig.json",
     "lint-and-fix:-ts": "tslint --project tsconfig.json --fix",
-    "build-and:test": "run-s build test-once",
-    "build-and:start": "run-s build start",
     "watch:ts": "tsc -w",
     "watch:test": "mocha dist/**/*.test.js -w --colors --inspect --growl",
-    "test-once": "mocha dist/**/*.test.js --inspect --colors",
-    "contributors-add": "all-contributors add",
-    "contributors-generate": "all-contributors generate"
+    "test-once": "mocha dist/**/*.test.js --inspect --colors"
   },
   "dependencies": {
     "express": "^4.17.3",
-    "tsns": "0.0.18",
     "typescript": "3.6.4"
   },
   "devDependencies": {
