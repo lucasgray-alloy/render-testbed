@@ -1,11 +1,54 @@
+import bodyParser from 'body-parser';
 import express from 'express';
+import Knex from 'knex';
+import { Customer } from './types/Customer/Customer';
 
-const app = express();
-const port = process.env.PORT || 3001;
+export const app = express();
+app.use(
+    bodyParser.urlencoded({
+        extended: true,
+    })
+);
+app.use(bodyParser.json());
+const port = process.env.PORT || 3002;
+
+export const dbConfig = {
+    database: process.env.database_name || 'alloy',
+    user: process.env.database_user || 'alloy',
+    password: process.env.database_password || 'alloy',
+    host: process.env.database_host || 'localhost',
+    port: 5432,
+};
+
+export const knex = Knex({
+    client: 'pg',
+    connection: dbConfig,
+    asyncStackTraces: true, // TODO turn off when running in prod
+});
 
 // define a route handler for the default home page
 app.get('/', (req, res) => {
     res.send('Hello world!');
+});
+
+app.post('/customer', (req, res, next) => {
+    console.log('hi this is a customer!');
+
+    const customer = req.body as Customer;
+
+    // validate
+    // authenticate
+
+    // save
+    knex<Customer>('customer')
+        .insert(customer, '*')
+        .returning<Customer>('*')
+        .then((savedCustomer) => {
+            console.log('did the thing');
+
+            // return success
+            return res.json(savedCustomer);
+        });
 });
 
 // start the Express server
